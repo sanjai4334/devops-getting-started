@@ -30,7 +30,7 @@ docker
 ## Add Jenkins to Docker group
  - Go to terminal and run these commands to add Jenkins to docker group
 ```bash
-sudo usermod - aG docker jenkins
+sudo usermod -aG docker jenkins
 sudo systemctl restart jenkins
 sudo reboot
 ```
