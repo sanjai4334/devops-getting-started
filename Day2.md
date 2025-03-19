@@ -1,3 +1,4 @@
+# Creating a docker image using 
 ## Installing Docker
   - Enter the following commands to inatall and verify installation of Docker
 ```bash
@@ -25,6 +26,15 @@ docker
  - In this page Check the `Restart Jenkins` after installation this will restart Jenkins
 
 ![image](https://github.com/user-attachments/assets/023e655e-e8e7-4b3b-9b74-317f9f4484f2)
+
+## Add Jenkins to Docker group
+ - Go to terminal and run these commands to add Jenkins to docker group
+```bash
+sudo usermod - aG docker jenkins
+sudo systemctl restart jenkins
+sudo reboot
+```
+- This will do its thing and reboot the system 
 
 ## Setting up docker credentials
  - Go to Jenkins > `Manage Jenkins` > `Credentials` > `System` > `Global Credentials (Unrestricted)` > `Add Credentials`
@@ -111,4 +121,11 @@ pipeline {
 }
 ```
  - click `save`
+ - click `build`
+
+![image](https://github.com/user-attachments/assets/7fad77f3-d083-414c-86fb-5ec0145a4b6d)
+
+ - Go to `localhosy:3001`
+
+![image](https://github.com/user-attachments/assets/ca5e469e-96d8-4cc9-986e-b490f0604dd6)
 
