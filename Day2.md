@@ -33,9 +33,85 @@ docker
 ![image](https://github.com/user-attachments/assets/cd3138ce-07b3-4070-97b9-0a8d76df4a36)
 
  - Enter a project name 
- - Select Freestyle Project
- - 
+ - Select `pipeline`
+ - Click `Ok`
 
-![image](https://github.com/user-attachments/assets/76288b7d-1d89-42a0-9975-290130d64f91)
+![image](https://github.com/user-attachments/assets/3b2b76ed-f099-4257-8669-cf269e4d10a3)
 
-  
+ - Go to `pipeline`
+ - Paste this script below:
+```groovy
+pipeline {
+    agent any
+    tools {
+        jdk 'jdk17'
+        nodejs 'node20'
+    }
+
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    echo "Cleaning workspace..."
+                    deleteDir() // Deletes everything in the Jenkins workspace before starting
+                }
+            }
+        }
+        
+
+        stage('Git Checkout') {
+            steps {
+                script {
+                    git branch: 'main', 
+                        credentialsId: 'github_seccred', 
+                        url: 'https://github.com/justicesecops-10/day2-app-depployement-docker.git'
+                }
+            }
+        }
+
+        stage('Install Node') {
+            steps {
+                script {
+                    sh '''
+                    if [ -f package.json ]; then
+                        echo "package.json found. Running npm install..."
+                        npm install
+                    else
+                        echo "ERROR: package.json is missing. Skipping npm install."
+                        exit 1
+                    fi
+                    '''
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        def imageName = "sanjai4334/docker"
+                        def tag = "latest"
+                        
+                        sh "docker build -t ${imageName} ."
+                        sh "docker tag ${imageName} ${imageName}:${tag}"
+                        sh "docker push ${imageName}:${tag}"
+                    }
+                }
+            }
+        }
+   stage('Deploy Docker Container') {
+    steps {
+        script {
+            // Stop and remove the existing container if it's running
+            sh "docker stop my_container || true"
+            sh "docker rm my_container || true"
+            
+            // Run the new container
+            sh "docker run -d --name my_container -p 3001:3000 sanjai4334/docker:latest"
+        }
+    }
+}
+
+    }
+}
+```
