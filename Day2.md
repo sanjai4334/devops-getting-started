@@ -24,6 +24,8 @@ docker
 
  - In this page Check the `Restart Jenkins` after installation this will restart Jenkins
 
+![image](https://github.com/user-attachments/assets/023e655e-e8e7-4b3b-9b74-317f9f4484f2)
+
 ## Setting up docker credentials
  - Go to Jenkins > `Manage Jenkins` > `Credentials` > `System` > `Global Credentials (Unrestricted)` > `Add Credentials`
  -  Fill your Docker hub `username` , `password`, and in the `id` field enter `docker-seccred`
@@ -31,8 +33,6 @@ docker
 ![image](https://github.com/user-attachments/assets/c9e87ffe-6776-48ae-ab68-440eb5310626)
 
 ## Creating and building a pipeline
-
-![image](https://github.com/user-attachments/assets/023e655e-e8e7-4b3b-9b74-317f9f4484f2)
 
  - Go to Jenkins `Dashboard` > `Create a Job`
 
