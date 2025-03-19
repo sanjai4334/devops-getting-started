@@ -24,7 +24,13 @@ docker
 
  - In this page Check the `Restart Jenkins` after installation this will restart Jenkins
 
-## Connectin
+## Setting up docker credentials
+ - Go to Jenkins > `Manage Jenkins` > `Credentials` > `System` > `Global Credentials (Unrestricted)` > `Add Credentials`
+ -  Fill your Docker hub `username` , `password`, and in the `id` field enter `docker-seccred`
+
+![image](https://github.com/user-attachments/assets/c9e87ffe-6776-48ae-ab68-440eb5310626)
+
+## Creating and building a pipeline
 
 ![image](https://github.com/user-attachments/assets/023e655e-e8e7-4b3b-9b74-317f9f4484f2)
 
@@ -39,79 +45,70 @@ docker
 ![image](https://github.com/user-attachments/assets/3b2b76ed-f099-4257-8669-cf269e4d10a3)
 
  - Go to `pipeline`
- - Paste this script below:
+ - Paste this script below and change the credential wherever mentioned:
 ```groovy
 pipeline {
     agent any
-    tools {
-        jdk 'jdk17'
-        nodejs 'node20'
+
+    environment {
+        IMAGE_NAME = "sanjai4334/docker"          // Replace with your Docker Hub username and image name
+        TAG = "latest"
+        CONTAINER_NAME = "my-container"
+        PORT = "3001"
     }
 
     stages {
-        stage('Clean Workspace') {
-            steps {
-                script {
-                    echo "Cleaning workspace..."
-                    deleteDir() // Deletes everything in the Jenkins workspace before starting
-                }
-            }
-        }
         
-
-        stage('Git Checkout') {
+        stage('Clone Repository') {
             steps {
-                script {
-                    git branch: 'main', 
-                        credentialsId: 'github_seccred', 
-                        url: 'https://github.com/justicesecops-10/day2-app-depployement-docker.git'
+                echo "Cloning GitHub repository..."
+                git 'https://github.com/sanjai4334/docker.git'  // Replace with your repo URL
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image..."
+                sh 'chmod +x build.sh'
+                sh './build.sh'
+            }
+        }
+
+                stage('Login to Docker Hub') {
+            steps {
+                echo "Logging into Docker Hub..." // Change the cedentialsID if you have docker credentials already added with another id other than docker-seccred
+                withCredentials([usernamePassword(credentialsId: 'docker-seccred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
                 }
             }
         }
 
-        stage('Install Node') {
+        stage('Push Docker Image') {
             steps {
-                script {
-                    sh '''
-                    if [ -f package.json ]; then
-                        echo "package.json found. Running npm install..."
-                        npm install
-                    else
-                        echo "ERROR: package.json is missing. Skipping npm install."
-                        exit 1
-                    fi
-                    '''
-                }
+                echo "Pushing Docker image to Docker Hub..."
+                sh "docker tag $IMAGE_NAME:$TAG $IMAGE_NAME:$TAG"
+                sh "docker push $IMAGE_NAME:$TAG"
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Deploy Docker Container') {
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        def imageName = "sanjai4334/docker"
-                        def tag = "latest"
-                        
-                        sh "docker build -t ${imageName} ."
-                        sh "docker tag ${imageName} ${imageName}:${tag}"
-                        sh "docker push ${imageName}:${tag}"
-                    }
-                }
+                echo "Deploying Docker container..."
+                sh 'chmod +x deploy.sh'
+                sh './deploy.sh'
             }
-        }
-   stage('Deploy Docker Container') {
-    steps {
-        script {
-            // Stop and remove the existing container if it's running
-            sh "docker stop my_container || true"
-            sh "docker rm my_container || true"
-            
-            // Run the new container
-            sh "docker run -d --name my_container -p 3001:3000 sanjai4334/docker:latest"
         }
     }
-}
 
+    post {
+        success {
+            echo "Deployment Successful!"
+        }
+        failure {
+            echo "Deployment Failed!"
+        }
     }
 }
 ```
+ - click `save`
+
