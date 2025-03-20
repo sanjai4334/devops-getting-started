@@ -125,10 +125,6 @@ pipeline {
 
 ![image](https://github.com/user-attachments/assets/7fad77f3-d083-414c-86fb-5ec0145a4b6d)
 
- - Go to `localhosy:3001`
-
-![image](https://github.com/user-attachments/assets/ca5e469e-96d8-4cc9-986e-b490f0604dd6)
-
  - Go to Docker Hub to see your image pushed there
 
 ![image](https://github.com/user-attachments/assets/e07c5427-63f9-4b5e-b4c9-091cdb8cf5c1)
