@@ -65,7 +65,7 @@ npm init -y
 ```bash
 npm init -y // again if the previous command installed npm
 cd ..
-docker pull sanjai4334/docker:latest . // replace with your docker uid/repo:image_tag
+docker pull sanjai4334/docker:latest // replace with your docker uid/repo:image_tag
 cd docker
 ```
 
