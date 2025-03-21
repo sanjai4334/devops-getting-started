@@ -25,4 +25,5 @@ update-java-alternatives --list
 
 ![image](https://github.com/user-attachments/assets/e71ecf62-8ba8-4cf5-8cd5-1ef1e1cb694e)
 
- - 
+## Fork The Repo and build the pipeline
+![image](https://github.com/user-attachments/assets/f2e44ee3-189b-47cf-9a10-c1d205661051)
