@@ -72,7 +72,7 @@ cd docker
 ![image](https://github.com/user-attachments/assets/f43cdced-7f44-4021-8d53-51cff5afc63a)
 
 ```bash
-docker build -t sanjai4334/docker/latest // replace with your docker uid/repo:image_tag
+docker build -t sanjai4334/docker:latest // replace with your docker uid/repo:image_tag
 docker ps -a
 ```
 
