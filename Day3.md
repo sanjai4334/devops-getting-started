@@ -94,3 +94,67 @@ curl <url>
  - open the url in browser
 
 ![image](https://github.com/user-attachments/assets/737839dc-6c3a-45a8-a937-bf21a6a78e14)
+
+
+## Config file codes
+Dockerfile
+```groovy
+# Use an official Node.js runtime as a base image
+FROM node:18
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package.json ./
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose port 3000 and start the app
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+nginx-deployment.yaml
+```groovy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app
+        image: sanjai4334/docker:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+```
+
+service.yaml
+```groovy
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app
+  namespace: default
+spec:
+  type: NodePort  # Ensures external access via a specific port
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80       # Service port inside the cluster
+      targetPort: 80  # The container's port
+      nodePort: 30391   # Externally accessible port
+```
