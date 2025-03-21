@@ -58,16 +58,27 @@ minikube dashboard
 mkdir docker
 nano  Dockerfile
 npm init -y
+```
+
+![image](https://github.com/user-attachments/assets/6dd49514-1000-461c-b688-b99bd2900b75)
+
+```bash
 npm init -y // again if the previous command installed npm
 cd ..
-```
-```bash
 docker pull sanjai4334/docker:latest . // replace with your docker uid/repo:image_tag
 cd docker
-docker build -t sanjai4334/docker/latest
 ```
+
+![image](https://github.com/user-attachments/assets/f43cdced-7f44-4021-8d53-51cff5afc63a)
+
 ```bash
+docker build -t sanjai4334/docker/latest // replace with your docker uid/repo:image_tag
 docker ps -a
+```
+
+![image](https://github.com/user-attachments/assets/8e05a11b-bceb-4a6e-8a2a-ecf37a760fa7)
+
+```bash
 sudo nano nginx-deployment.yaml
 kubectl apply -f nginx-deployment.yaml
 sudo nano service.yaml
@@ -75,8 +86,11 @@ kubectl apply -f service.yaml
 kubectl get pods
 minikube get svc my-app
 minikube service my-app --url
-```
- - open the url in browser
-```bash
 curl <url>
 ```
+
+![image](https://github.com/user-attachments/assets/0b3f729e-204c-4f20-ba2f-af829eace370)
+
+ - open the url in browser
+
+![image](https://github.com/user-attachments/assets/737839dc-6c3a-45a8-a937-bf21a6a78e14)
